@@ -4,12 +4,14 @@ import Navbar from './Components/Navbar';
 import Home from './Pages/Home';
 import About from './Pages/About';
 import Notestate from './Context/Note/Notestate';
+import Alert from './Components/Alert';
 function App() {
   return (
     <>
       <Notestate>
         <BrowserRouter>
           <Navbar />
+          <Alert message="this is amazing react app"/>
           <div className='container'>
             <Routes>
               <Route exact path='/' element={<Home />} />
