@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import NoteContext from '../Context/Note/NoteContext'
 const About = () => {
-  const a = useContext(NoteContext)
+  // const a = useContext(NoteContext)
 
   // useEffect(() => {
   //   a.update()
