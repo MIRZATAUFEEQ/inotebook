@@ -13,6 +13,7 @@ router.post('/createuser', [
     body('password', 'enter a valid password').isLength({ min: 8 }),
 ], async (req, res) => {
     // if there are errors return bad request and the errors 
+    let success=false
     const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ error: error.array() });
@@ -24,7 +25,7 @@ router.post('/createuser', [
 
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: 'sorry a user with this email already exists' })
+            return res.status(400).json({success, error: 'sorry a user with this email already exists' })
         }
 
         // password hashing
@@ -58,6 +59,7 @@ router.post('/login', [
     body('email', 'enter valid email').isEmail(),
     body('password', 'password cannot be blank').exists(),
 ], async (req, res) => {
+    success=false
     // if there are errors return bad request and the errors 
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -71,12 +73,12 @@ router.post('/login', [
         // firstly find email with findone method 
         let user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ error: "please try to login with correct email" })
+            return res.status(400).json({success, error: "please try to login with correct email" })
         }
         // compare password with you existing accounting
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
-            return res.status(400).json({ error: "please try to login with correct email" })
+            return res.status(400).json({success, error: "please try to login with correct email" })
         }
 
         // sending authtoken 
@@ -84,7 +86,8 @@ router.post('/login', [
             id: user.id,
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({ authtoken })
+        success=true
+        res.json({success, authtoken })
 
     } catch (error) {
         console.error(error.message);

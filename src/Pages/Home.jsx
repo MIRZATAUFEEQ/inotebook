@@ -1,10 +1,10 @@
 import React from 'react'
 import Notes from '../Components/Notes';
-const Home = () => {
-
+const Home = (props) => {
+  const { showalert } = props;
   return (
     <>
-      <Notes />
+      <Notes showalert={showalert} />
     </>
   )
 }
