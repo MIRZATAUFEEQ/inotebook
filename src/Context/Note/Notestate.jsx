@@ -18,11 +18,11 @@ const Notestate = (props) => {
 
             headers: {
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODE4Y2ZlODdjYjA5ZGNmYzZlNmQyMyIsImlhdCI6MTcwMjk5MTQ1NH0.5KAHA8xQYjEtOvGHP4eR_67yZKmv2IlitHM1xCQBYWE",
+                "auth-token": localStorage.getItem("token"),
             },
         });
         const json = await response.json()
-        console.log(json)
+        // console.log(json)
         setnotes(json);
     }
 
@@ -32,46 +32,37 @@ const Notestate = (props) => {
     const addnote = async (title, description, tag) => {
         // TODO: api call 
         // API Call 
+        // eslint-disable-next-line 
         const response = await fetch(`${host}/api/notes/addnotes`, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
-
             headers: {
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODE4Y2ZlODdjYjA5ZGNmYzZlNmQyMyIsImlhdCI6MTcwMjk5MTQ1NH0.5KAHA8xQYjEtOvGHP4eR_67yZKmv2IlitHM1xCQBYWE",
+                "auth-token": localStorage.getItem("token"),
             },
             body: JSON.stringify({ title, description, tag }),
         });
-
-
-
-        console.log("adding a new note")
-        const note = {
-            "_id": "6583dcb05fc9842bd3a6e8eb1",
-            "user": "65818cfe87cb09dcfc6e6d23",
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": "2023-12-21T06:35:28.446Z",
-            "__v": 0
-        }
+        const note = await response.json()
 
         setnotes(notes.concat(note))
+
+        // console.log("adding a new note")
+
     }
 
 
     // delete Note😡😡😡😡😡🤬🤬
-    const deletenote =async (id) => {
-          // API Call 
-          const response = await fetch(`${host}/api/notes/deletenotes/${id}`, {
+    const deletenote = async (id) => {
+        // API Call 
+        const response = await fetch(`${host}/api/notes/deletenotes/${id}`, {
             method: "DELETE", // *GET, POST, PUT, DELETE, etc.
 
             headers: {
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODE4Y2ZlODdjYjA5ZGNmYzZlNmQyMyIsImlhdCI6MTcwMjk5MTQ1NH0.5KAHA8xQYjEtOvGHP4eR_67yZKmv2IlitHM1xCQBYWE",
+                "auth-token": localStorage.getItem("token"),
             },
         });
         const json = response.json();
-        console.log(json)
+        // console.log(json)
 
 
 
@@ -89,31 +80,31 @@ const Notestate = (props) => {
 
         // API Call 
         const response = await fetch(`${host}/api/notes/updatenotes/${id}`, {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
 
             headers: {
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODE4Y2ZlODdjYjA5ZGNmYzZlNmQyMyIsImlhdCI6MTcwMjk5MTQ1NH0.5KAHA8xQYjEtOvGHP4eR_67yZKmv2IlitHM1xCQBYWE",
+                "auth-token": localStorage.getItem("token"),
             },
             body: JSON.stringify({ title, description, tag }),
         });
         const json = response.json();
-        console.log(json)
+        // console.log(json)
 
 
 
-        // logig to edite in client 
-        for (let index = 0; index < notes.length; index++) {
-            const element = notes[index];
+        // logic to edite in client 
+        let NewNote = JSON.parse(JSON.stringify(notes))
+        for (let index = 0; index < NewNote.length; index++) {
+            const element = NewNote[index];
             if (element._id === id) {
-
-
-                element.title = title;
-                element.description = description;
-                element.tag = tag;
+                NewNote[index].title = title;
+                NewNote[index].description = description;
+                NewNote[index].tag = tag;
+                break;
             }
-
         }
+        setnotes(NewNote)
     }
 
 
@@ -127,94 +118,3 @@ const Notestate = (props) => {
 }
 
 export default Notestate
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const detail = {
-//     "name": "sahil",
-//     "class": "bca 5th"
-// }
-// const [updatedetail, setupdatedetail] = useState(detail)
-// const update = () => {
-//     setTimeout(() => {
-//         setupdatedetail({
-//             "name": "aman",
-//             "class": "7"
-//         })
-//     }, 1000);
-// }
